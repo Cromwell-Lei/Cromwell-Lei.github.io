@@ -124,7 +124,7 @@ git push origin main
 
 GitHub Settings → Pages：Source 为 Deploy from a branch，branch 为 main，目录为 / (root)。Push 后 GitHub 自动运行内置 Pages 发布流程；本项目不需要自建 Actions workflow 或任何 secret。
 
-等待仓库 Actions 中的 `pages build and deployment` 成功，再打开网站验证。改 CSS/JS 后更新各 HTML 的 `?v=2` 版本号可避免旧浏览器缓存。不要以一次 push 成功代替部署检查。
+等待仓库 Actions 中的 `pages build and deployment` 成功，再打开网站验证。改 CSS/JS 后更新各 HTML 的 `?v=3` 版本号可避免旧浏览器缓存。不要以一次 push 成功代替部署检查。
 
 需要回滚时使用 `git revert <commit-sha>` 创建反向提交再 push，不使用 force push。部署会重新发布回滚后的版本。
 
