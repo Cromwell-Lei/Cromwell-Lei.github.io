@@ -15,6 +15,7 @@ Static HTML, CSS and vanilla JavaScript, published by GitHub Pages from `main` /
 - `photography.html` — photography, music, motorsport and the photobook in preparation.
 - `zh/` — complete Chinese versions of all five pages.
 - `assets/citations/` — citations to the two arXiv preprints, not invented proceedings records.
+- `assets/images/world-stage-cover.webp` — web-ready 3:2 portfolio preview of the personal photobook cover.
 
 ## Sources and factual boundaries
 
