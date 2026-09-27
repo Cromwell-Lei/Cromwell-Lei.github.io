@@ -1,7 +1,6 @@
 """Generate the bilingual static archive. Run: python3 scripts/build.py"""
 from pathlib import Path
 from html import escape
-import re
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://cromwell-lei.github.io/'
@@ -61,7 +60,7 @@ def paper(p,lang,full=False):
     tr=lambda a,b: a if lang=='en' else b
     title=e(p['title'],lang); authors=e(p['authors'],lang).replace('Chenjun Lei','<strong>Chenjun Lei</strong>').replace('雷晨俊','<strong>雷晨俊</strong>')
     if 'arxiv' in p: title=f'<a href="https://arxiv.org/abs/{p["arxiv"]}">{title}</a>'
-    s=f'<article class="record publication" id="{p["id"]}"><div class="meta"><span>{p["year"]} / {e(p["venue"],lang)}</span><span class="status">{e(p["status"],lang)}</span></div><h3 lang="en">{title}</h3><p class="authors">{authors}</p><p>{e(p["summary"],lang)}</p>'
+    s=f'<article class="record publication" id="{p["id"]}"><div class="meta"><span>{p["year"]} / {e(p["venue"],lang)}</span><span class="status">{e(p["status"],lang)}</span></div><h3 lang="{"zh-CN" if lang=="zh" and isinstance(p["title"],dict) else "en"}">{title}</h3><p class="authors">{authors}</p><p>{e(p["summary"],lang)}</p>'
     if full:
         if 'arxiv' in p: s+=f'<p class="venue-name">2026 IEEE International Conference on Systems, Man, and Cybernetics</p>'
         s+=f'<details><summary>{tr("Research summary & findings","研究简介与结果")}</summary><p>{e(p["detail"],lang)}</p></details>'
@@ -72,7 +71,7 @@ def paper(p,lang,full=False):
     elif full and p['id']=='synstress': s+=f'<p class="availability">{tr("Manuscript submitted; public paper and data links pending.","稿件投稿中，公开原文与数据链接待发布。")}</p>'
     return s+'</article>'
 
-def chapter(id,num,label,title,body): return f'<section class="chapter" id="lei-{id}"><div class="chapter-label"><p class="kicker">{num} / {label}</p><h2>{title}</h2></div><div>{body}</div></section>'
+def chapter(id,num,label,title,body): return f'<section class="chapter" id="lei-{id}"><div class="chapter-label"><p class="kicker">{num} / {label}</p>{('<h2>'+title+'</h2>') if title else ''}</div><div>{body}</div></section>'
 def education(lang):
     tr=lambda a,b:a if lang=='en' else b
     return f'''<div class="job"><span class="job-date">05/2026 — {tr('Present','至今')}</span><div><h3>{tr('Australian National University','澳大利亚国立大学')}</h3><p>{tr('Master of Economics','经济学硕士')}</p></div></div>
