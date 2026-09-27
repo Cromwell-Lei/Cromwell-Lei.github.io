@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   document.querySelectorAll('[data-year]').forEach(el => { el.textContent = String(new Date().getFullYear()); });
-  const legacy = { '#work': '#lei-projects', '#photography': '#lei-outside', '#about': '#lei-experience', '#contact': '#lei-contact', '#research': '#lei-research', '#projects': '#lei-projects', '#experience': '#lei-experience' };
+  const legacy = { '#work': '#lei-projects', '#photography': '#lei-outside', '#about': '#lei-experience', '#contact': '#lei-contact', '#research': '#lei-research', '#projects': '#lei-projects', '#experience': '#lei-experience', '#data-engineering': '#synthetic-platform', '#digital-products': '#annotation-platform' };
   const destination = legacy[location.hash];
   if (destination && document.querySelector(destination)) {
     history.replaceState(null, '', destination);
@@ -22,6 +22,11 @@
     }, { rootMargin: '-10% 0px -55% 0px', threshold: 0 });
     links.forEach(link => { const target = document.querySelector(link.hash); if (target) observer.observe(target); });
   }
+  document.querySelector('[data-language-switch]')?.addEventListener('click', event => {
+    const target = event.currentTarget;
+    if (location.hash) target.href = target.href.split('#')[0] + location.hash;
+  });
+  document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
   // Opt in only real photographs. Placeholders are never links.
   const photos = [...document.querySelectorAll('a[data-lightbox]')];
   if (!photos.length || typeof HTMLDialogElement === 'undefined') return;
