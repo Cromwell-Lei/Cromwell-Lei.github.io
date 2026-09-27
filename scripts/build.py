@@ -132,7 +132,8 @@ def build(lang):
     body+=chapter('education','04',tr('Education','教育'),tr('Learning<br>with purpose.','持续学习。'),education(lang))
     cover_caption=tr('Photobook cover · 世界皆舞台','个人影集封面 · 世界皆舞台')
     cover_alt=tr('Photobook cover: a Canberra lakeside photograph with the handwritten title 世界皆舞台 and a small Hatsune Miku illustration.','个人影集《世界皆舞台》封面：堪培拉湖畔照片，叠加手写标题与初音未来插画。')
-    cover_card=f'<a class="cover-card" href="photography.html#photobook"><img src="assets/images/world-stage-cover.webp" alt="{cover_alt}" width="1536" height="1024" loading="lazy"><span>{cover_caption} ↗</span></a>'
+    cover_path='../assets/images/world-stage-cover.webp' if lang=='zh' else 'assets/images/world-stage-cover.webp'
+    cover_card=f'<a class="cover-card" href="photography.html#photobook"><img src="{cover_path}" alt="{cover_alt}" width="1536" height="1024" loading="lazy"><span>{cover_caption} ↗</span></a>'
     body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),cover_card+interests(lang)+link('photography.html',tr('Beyond the screen','工作之外')))
     contact=f'<h2>{tr("Let’s compare notes.","交换想法，保持联系。")}</h2><p>{tr("Research, data products, or a shared curiosity.","关于研究、数据产品，或一个共同感兴趣的问题。")}</p><dl class="contact-list"><div><dt>{tr("Email","邮箱")}</dt><dd><a href="mailto:fjsmlcj@gmail.com">fjsmlcj@gmail.com</a></dd></div><div><dt>GitHub</dt><dd><a href="https://github.com/Cromwell-Lei">Cromwell-Lei ↗</a></dd></div><div><dt>{tr("Location","所在地")}</dt><dd>{tr("Shanghai, China / Canberra, Australia","中国上海 / 澳大利亚堪培拉")}</dd></div></dl><details class="phone-details"><summary>{tr("Phone contact","电话联系")}</summary><p><a href="tel:+8619168655714">+86 19168655714</a> · <a href="tel:+61458020537">+61 458020537</a></p></details>'
     body+=chapter('contact','06',tr('Contact','联系'),'',contact)
