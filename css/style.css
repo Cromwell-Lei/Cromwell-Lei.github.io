@@ -117,7 +117,7 @@ body .hero-links a{
   padding-bottom:5px
 }
 
-    body .art{
+body .art{
   aspect-ratio:1/1.08;
   background:#e1e6e0;
   position:relative;
@@ -1046,6 +1046,7 @@ body .interest-notes .kicker{margin-bottom:14px}
 body .photobook-note{background:#e7ece6;padding:50px;margin:20px 0 35px}
 body .photobook-note h2{font-family:Georgia,'Songti SC','SimSun',serif;font-size:clamp(32px,6vw,64px);font-weight:400;margin:24px 0}
 body .photobook-cover{margin:28px 0 8px}
+body .hero-avatar img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:center;background:#202a2c}
 body .photobook-cover img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
 body .photobook-cover figcaption{display:flex;justify-content:space-between;gap:12px;padding-top:10px;color:var(--muted);font-size:12px}
 body .cover-card{display:block;margin:0 0 30px;border:1px solid var(--rule);padding:12px;background:#e7ece6}

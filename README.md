@@ -16,6 +16,7 @@ Static HTML, CSS and vanilla JavaScript, published by GitHub Pages from `main` /
 - `zh/` — complete Chinese versions of all five pages.
 - `assets/citations/` — citations to the two arXiv preprints, not invented proceedings records.
 - `assets/images/world-stage-cover.webp` — web-ready 3:2 portfolio preview of the personal photobook cover.
+- `assets/images/lei-avatar.webp` — square crop of the user-supplied Canberra night-hiking photograph for the bilingual homepage.
 
 ## Sources and factual boundaries
 
