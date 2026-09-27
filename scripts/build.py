@@ -95,14 +95,21 @@ def interests(lang):
 def photo_carousel(lang, prefix=''):
     """A reusable carousel. Add future photographs to `slides` only."""
     tr=lambda a,b:a if lang=='en' else b
-    slides=[{
-        'src': prefix+'assets/images/world-stage-cover.webp',
-        'alt': tr('Photobook cover: a Canberra lakeside photograph with the handwritten title 世界皆舞台 and a small Hatsune Miku illustration.', '个人影集《世界皆舞台》封面：堪培拉湖畔照片，叠加手写标题与初音未来插画。'),
-        'caption': tr('Photobook cover · 世界皆舞台', '个人影集封面 · 世界皆舞台')
-    }]
-    items=''.join(f'<figure class="carousel-slide" data-carousel-slide data-caption="{s["caption"]}"><img src="{s["src"]}" alt="{s["alt"]}" width="1536" height="1024" loading="lazy"></figure>' for s in slides)
+    slides=[
+        ('fsae-australasia.webp', tr('FSAE Australasia competition', 'FSAE 澳大利亚赛事'), tr('ANU Formula Sport race car at FSAE Australasia competition.', 'FSAE 澳大利亚赛事上的 ANU Formula Sport 赛车。')),
+        ('a-bad-days-happy.webp', tr("A bad day's happy", '坏日子里的快乐'), tr('A person resting on a swing under a bright blue sky.', '晴空下坐在秋千上的人。')),
+        ('yamaha-ytr200dt.webp', 'YAMAHA YTR200DT', tr('A YAMAHA YTR200DT trumpet.', '一支 YAMAHA YTR200DT 小号。')),
+        ('bicycle.webp', '', tr('A bicycle resting beneath yellow autumn trees.', '金色秋树下的一辆自行车。')),
+        ('taipei-taiwan.webp', tr('Taipei, Taiwan', '台北，台湾'), tr('A Taiwan flag seen through an aeroplane window.', '透过飞机舷窗看到的台湾旗帜。')),
+        ('sanming-china.webp', tr('Sanming, China', '中国三明'), tr('A night street scene in Sanming, China.', '中国三明的夜间街景。')),
+        ('marina-bay-singapore.webp', tr('Marina Bay, Singapore', '新加坡滨海湾'), tr('Sunset over Marina Bay, Singapore.', '新加坡滨海湾的日落。')),
+        ('fuji-japan.webp', tr('Fuji, Japan', '日本富士山'), tr('A summit marker on Mount Fuji, Japan.', '日本富士山顶的标志碑。')),
+        ('canberra-australia.webp', tr('Canberra, Australia', '澳大利亚堪培拉'), tr('A bicycle beside Lake Burley Griffin in Canberra.', '堪培拉伯利·格里芬湖畔的一辆自行车。')),
+        ('cityu-macau.webp', tr('Someday in CityU Macau', '澳门城市大学的某一天'), tr('Late sunlight through a City University of Macau stairwell.', '晚阳穿过澳门城市大学楼梯间。')),
+    ]
+    items=''.join(f'<figure class="carousel-slide" data-carousel-slide data-caption="{escape(s[1], quote=True)}"><img src="{prefix}assets/photos/{s[0]}" alt="{escape(s[2], quote=True)}" loading="lazy"></figure>' for s in slides)
     disabled=' disabled' if len(slides) < 2 else ''
-    return f'<section class="photo-carousel" data-carousel aria-label="{tr("Photography carousel", "摄影作品轮播")}"><div class="carousel-viewport">{items}</div><div class="carousel-controls"><button type="button" data-carousel-prev aria-label="{tr("Previous photograph", "上一张照片")}"{disabled}>←</button><p class="carousel-count" data-carousel-count aria-live="polite">1 / {len(slides)}</p><button type="button" data-carousel-next aria-label="{tr("Next photograph", "下一张照片")}"{disabled}>→</button></div><p class="carousel-caption" data-carousel-caption>{slides[0]["caption"]}</p></section>'
+    return f'<section class="photo-carousel" data-carousel aria-label="{tr("Photography carousel", "摄影作品轮播")}"><div class="carousel-viewport">{items}</div><div class="carousel-controls"><button type="button" data-carousel-prev aria-label="{tr("Previous photograph", "上一张照片")}"{disabled}>←</button><p class="carousel-count" data-carousel-count aria-live="polite">1 / {len(slides)}</p><button type="button" data-carousel-next aria-label="{tr("Next photograph", "下一张照片")}"{disabled}>→</button></div><p class="carousel-caption" data-carousel-caption>{slides[0][1]}</p></section>'
 
 def render(lang,page,title,description,body):
     tr=lambda a,b:a if lang=='en' else b

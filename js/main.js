@@ -50,6 +50,7 @@
       if (slides.length < 2 || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
       event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1);
     });
+    carousel.classList.add('is-ready');
     render();
   });
   // Opt in only real photographs. Placeholders are never links.

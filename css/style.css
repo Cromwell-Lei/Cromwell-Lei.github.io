@@ -1055,8 +1055,9 @@ body .cover-card span{display:block;padding:10px 2px 0;font-size:12px;letter-spa
 body .photo-carousel{margin:0 0 30px;border:1px solid var(--rule);padding:12px;background:#e7ece6}
 body .carousel-viewport{position:relative;overflow:hidden;background:#d9e0d9}
 body .carousel-slide{display:none;margin:0}
+body .photo-carousel:not(.is-ready) .carousel-slide:first-child{display:block}
 body .carousel-slide.is-active{display:block}
-body .carousel-slide img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
+body .carousel-slide img{display:block;width:100%;height:clamp(310px,42vw,560px);object-fit:contain;margin:auto}
 body .carousel-controls{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
 body .carousel-controls button{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--rule);background:transparent;color:var(--ink);font:20px/1 Arial,sans-serif;cursor:pointer}
 body .carousel-controls button:disabled{opacity:.35;cursor:not-allowed}
