@@ -27,6 +27,31 @@
     if (location.hash) target.href = target.href.split('#')[0] + location.hash;
   });
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+  document.querySelectorAll('[data-carousel]').forEach(carousel => {
+    const slides = [...carousel.querySelectorAll('[data-carousel-slide]')];
+    const previous = carousel.querySelector('[data-carousel-prev]');
+    const next = carousel.querySelector('[data-carousel-next]');
+    const count = carousel.querySelector('[data-carousel-count]');
+    const caption = carousel.querySelector('[data-carousel-caption]');
+    let current = 0;
+    const render = () => {
+      slides.forEach((slide, index) => {
+        const active = index === current;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+      count.textContent = (current + 1) + ' / ' + slides.length;
+      caption.textContent = slides[current].dataset.caption || '';
+    };
+    const move = delta => { current = (current + delta + slides.length) % slides.length; render(); };
+    previous?.addEventListener('click', () => move(-1));
+    next?.addEventListener('click', () => move(1));
+    carousel.addEventListener('keydown', event => {
+      if (slides.length < 2 || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+      event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1);
+    });
+    render();
+  });
   // Opt in only real photographs. Placeholders are never links.
   const photos = [...document.querySelectorAll('a[data-lightbox]')];
   if (!photos.length || typeof HTMLDialogElement === 'undefined') return;
