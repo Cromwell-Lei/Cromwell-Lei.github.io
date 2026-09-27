@@ -85,12 +85,17 @@ def honors(lang):
     return ''.join(f'<div class="job"><span class="job-date">{y}</span><div><h3>{tr("Outstanding Research Team Scholarship","优秀科研团队奖学金")}</h3><p>{tr("City University of Macau · Awarded for outstanding research-team performance.","澳门城市大学 · 表彰优秀科研团队表现。")}</p></div></div>' for y in ('2025','2024'))
 def job(j,lang,full=False):
     return f'<article class="job"><span class="job-date">{j["date"]}</span><div><h3>{e(j["org"],lang)}</h3><p>{e(j["role"],lang)} <span class="job-location">/ {e(j["place"],lang)}</span></p>{ul(j["points"],lang) if full else "<p class=\"job-note\">"+e(j["points"][0],lang)+"</p>"}</div></article>'
-def interests(lang):
+def interests(lang, include_photobook=False):
     tr=lambda a,b:a if lang=='en' else b
-    return '<div class="interest-notes">'+''.join(f'<article><p class="kicker">{i:02}</p><h3>{a}</h3><p>{b}</p></article>' for i,(a,b) in enumerate([
+    cover=''
+    if include_photobook:
+        cover=f'<figure class="interest-feature"><img src="{"../" if lang=="zh" else ""}assets/images/world-stage-photobook.webp" alt="{tr("Cover of 世界皆舞台, a personal photobook.", "个人影集《世界皆舞台》封面。")}" width="1600" height="1200" loading="lazy"></figure>'
+    entries=[
         (tr('Photography','摄影'),tr('Urban scenes, quiet light and everyday life. I am developing a personal photobook, 世界皆舞台 (All the World’s a Stage).','关注都市、光影与日常生活，正在筹备个人摄影作品集《世界皆舞台》。')),
         (tr('Music','音乐'),tr('Trumpet player in the Australian National University orchestra.','澳大利亚国立大学管弦乐团小号手。')),
-        (tr('Motorsport & engineering','赛车与工程'),tr('Powertrain assembly engineer with the ANU Formula Sport team (ANUFS).','ANUFS 方程式赛车队内燃机动力总成工程师。'))],1))+'</div>'
+        (tr('Motorsport & engineering','赛车与工程'),tr('Powertrain assembly engineer with the ANU Formula Sport team (ANUFS).','ANUFS 方程式赛车队内燃机动力总成工程师。'))
+    ]
+    return '<div class="interest-notes">'+''.join(f'<article><p class="kicker">{i:02}</p><h3>{a}</h3><p>{b}</p>{cover if i==1 else ""}</article>' for i,(a,b) in enumerate(entries,1))+'</div>'
 
 def photo_carousel(lang, prefix=''):
     """A reusable carousel. Add future photographs to `slides` only."""
@@ -148,7 +153,7 @@ def build(lang):
     body+=chapter('projects','02',tr('Projects','项目'),tr('From ideas<br>to practice.','从想法<br>到实践。'),'<div class="project-grid">'+cards+'</div>')
     body+=chapter('experience','03',tr('Experience','经历'),tr('A professional<br>perspective.','在实践中<br>积累视角。'),''.join(job(j,lang) for j in jobs)+link('experience.html',tr('Full experience, education & awards','完整经历、教育与荣誉')))
     body+=chapter('education','04',tr('Education','教育'),tr('Learning<br>with purpose.','持续学习。'),education(lang))
-    body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),photo_carousel(lang, '../' if lang=='zh' else '')+interests(lang)+link('photography.html',tr('Beyond the screen','工作之外')))
+    body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),photo_carousel(lang, '../' if lang=='zh' else '')+interests(lang, True)+link('photography.html',tr('Beyond the screen','工作之外')))
     contact=f'<h2>{tr("Let’s compare notes.","交换想法，保持联系。")}</h2><p>{tr("Research, data products, or a shared curiosity.","关于研究、数据产品，或一个共同感兴趣的问题。")}</p><dl class="contact-list"><div><dt>{tr("Email","邮箱")}</dt><dd><a href="mailto:fjsmlcj@gmail.com">fjsmlcj@gmail.com</a></dd></div><div><dt>GitHub</dt><dd><a href="https://github.com/Cromwell-Lei">Cromwell-Lei ↗</a></dd></div><div><dt>{tr("Location","所在地")}</dt><dd>{tr("Shanghai, China / Canberra, Australia","中国上海 / 澳大利亚堪培拉")}</dd></div></dl><details class="phone-details"><summary>{tr("Phone contact","电话联系")}</summary><p><a href="tel:+8619168655714">+86 19168655714</a> · <a href="tel:+61458020537">+61 458020537</a></p></details>'
     body+=chapter('contact','06',tr('Contact','联系'),'',contact)
     save('index',tr('Research, products & perspectives','研究、产品与观察'),tr('Chenjun Lei: economics at ANU, FinTech products, synthetic data and applied research. Explore papers, projects, experience and interests.','雷晨俊的个人主页：澳大利亚国立大学经济学、金融科技产品、合成数据与应用研究。论文、项目、工作经历与个人兴趣。'),body)
@@ -175,7 +180,7 @@ def build(lang):
     save('experience',tr('Experience & education','经历与教育'),tr('Chenjun Lei’s work experience, education, research-team awards, skills and campus activities.','雷晨俊的工作经历、教育背景、科研团队奖学金、技能与校园活动。'),body)
 
     body=hero(lang,'04 / '+tr('Outside work','生活'),tr('A different kind<br>of attention.','另一种<br>观察方式。'),tr('Photography, music and the mechanics of things that move.','摄影、音乐，以及驱动车辆前行的机械。'))
-    body+='<section class="archive-block">'+interests(lang)+'</section><section class="photobook-note" id="photobook"><p class="kicker">'+tr('Personal photobook / In development','个人影集 / 筹备中')+'</p><h2>世界皆舞台</h2><p>'+tr('All the World’s a Stage','用影像，记录我所看见的世界。')+'</p>'+photo_carousel(lang, '../')+'<p class="archive-note">'+tr('A photographic collection in preparation. Selected photographs will be added as the sequence takes shape.','正在整理与编排中的个人摄影作品集。精选作品将在编排成形后陆续加入。')+'</p></section>'+link('index.html#lei-contact',tr('Get in touch','保持联系'))
+    body+='<section class="archive-block">'+interests(lang, True)+'</section><section class="photobook-note" id="photobook"><p class="kicker">'+tr('Personal photobook / In development','个人影集 / 筹备中')+'</p><h2>世界皆舞台</h2><p>'+tr('All the World’s a Stage','用影像，记录我所看见的世界。')+'</p>'+photo_carousel(lang, '../')+'<p class="archive-note">'+tr('A photographic collection in preparation. Selected photographs will be added as the sequence takes shape.','正在整理与编排中的个人摄影作品集。精选作品将在编排成形后陆续加入。')+'</p></section>'+link('index.html#lei-contact',tr('Get in touch','保持联系'))
     save('photography',tr('Outside work','工作之外'),tr('Photography, trumpet and Formula Sport: Chenjun Lei beyond research and work.','摄影、小号与方程式赛车：研究和工作之外的雷晨俊。'),body)
 
 for lang in ('en','zh'): build(lang)

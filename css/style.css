@@ -1041,8 +1041,12 @@ body .job h3{line-height:1.3;margin-bottom:7px}
 body .skills-grid{display:grid;gap:24px}
 body .skills-grid h3,body .interest-notes h3{font-size:20px;font-weight:500;margin-bottom:10px}
 body .skills-grid p,body .interest-notes p:not(.kicker){font-size:15px;color:var(--muted)}
-body .interest-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}
+body .interest-notes{display:grid;grid-template-columns:1fr;gap:0}
+body .interest-notes article{padding:25px 0}
+body .interest-notes article+article{border-top:1px solid var(--rule)}
 body .interest-notes .kicker{margin-bottom:14px}
+body .interest-feature{margin:22px 0 0;border:1px solid var(--rule);background:#e7ece6;padding:8px}
+body .interest-feature img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
 body .photobook-note{background:#e7ece6;padding:50px;margin:20px 0 35px}
 body .photobook-note h2{font-family:Georgia,'Songti SC','SimSun',serif;font-size:clamp(32px,6vw,64px);font-weight:400;margin:24px 0}
 body .photobook-cover{margin:28px 0 8px}
