@@ -130,7 +130,7 @@ def render(lang,page,title,description,body):
 <meta property="og:type" content="website"><meta property="og:title" content="{escape(title)} — Chenjun Lei"><meta property="og:description" content="{escape(description)}"><meta property="og:url" content="{BASE+path}"><meta property="og:locale" content="{tr('en_GB','zh_CN')}">
 <link rel="icon" href="{prefix}assets/icons/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}css/style.css?v=5"><script defer src="{prefix}js/main.js?v=5"></script></head><body>
 <a class="skip-link" href="#main">{tr('Skip to content','跳至正文')}</a><header><a class="brand" href="./">{tr('CHENJUN LEI','雷晨俊 / CHENJUN LEI')}</a><nav aria-label="{tr('Main navigation','主导航')}">{nav}<a class="language-switch" data-language-switch href="{other}" lang="{tr('zh-CN','en')}" hreflang="{tr('zh-CN','en')}" aria-label="{tr('切换至中文','Switch to English')}">{tr('中文','EN')}</a></nav></header>
-<main id="main">{body}</main><footer><p>© <span data-year>2026</span> CHENJUN LEI</p><p>{tr('Shanghai / Canberra','上海 / 堪培拉')}</p><a href="#main">{tr('Back to top ↑','回到顶部 ↑')}</a></footer></body></html>'''
+<main id="main">{body}</main><footer><p>© <span data-year>2026</span> CHENJUN LEI</p><p>{tr('May we both have good things to show for it :)','祝我们都有好收获 :)')}</p><p>{tr('Shanghai / Canberra','上海 / 堪培拉')}</p><a href="#main">{tr('Back to top ↑','回到顶部 ↑')}</a></footer></body></html>'''
 
 def hero(lang,num,title,lead):
     return f'<section class="page-hero"><p class="breadcrumb"><a href="./">{"Home" if lang=="en" else "首页"}</a> / {num}</p><h1>{title}</h1><p class="lead">{lead}</p></section>'
