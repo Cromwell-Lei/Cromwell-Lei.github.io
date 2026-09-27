@@ -92,19 +92,31 @@ def interests(lang):
         (tr('Music','音乐'),tr('Trumpet player in the Australian National University orchestra.','澳大利亚国立大学管弦乐团小号手。')),
         (tr('Motorsport & engineering','赛车与工程'),tr('Powertrain assembly engineer with the ANU Formula Sport team (ANUFS).','ANUFS 方程式赛车队内燃机动力总成工程师。'))],1))+'</div>'
 
+def photo_carousel(lang, prefix=''):
+    """A reusable carousel. Add future photographs to `slides` only."""
+    tr=lambda a,b:a if lang=='en' else b
+    slides=[{
+        'src': prefix+'assets/images/world-stage-cover.webp',
+        'alt': tr('Photobook cover: a Canberra lakeside photograph with the handwritten title 世界皆舞台 and a small Hatsune Miku illustration.', '个人影集《世界皆舞台》封面：堪培拉湖畔照片，叠加手写标题与初音未来插画。'),
+        'caption': tr('Photobook cover · 世界皆舞台', '个人影集封面 · 世界皆舞台')
+    }]
+    items=''.join(f'<figure class="carousel-slide" data-carousel-slide data-caption="{s["caption"]}"><img src="{s["src"]}" alt="{s["alt"]}" width="1536" height="1024" loading="lazy"></figure>' for s in slides)
+    disabled=' disabled' if len(slides) < 2 else ''
+    return f'<section class="photo-carousel" data-carousel aria-label="{tr("Photography carousel", "摄影作品轮播")}"><div class="carousel-viewport">{items}</div><div class="carousel-controls"><button type="button" data-carousel-prev aria-label="{tr("Previous photograph", "上一张照片")}"{disabled}>←</button><p class="carousel-count" data-carousel-count aria-live="polite">1 / {len(slides)}</p><button type="button" data-carousel-next aria-label="{tr("Next photograph", "下一张照片")}"{disabled}>→</button></div><p class="carousel-caption" data-carousel-caption>{slides[0]["caption"]}</p></section>'
+
 def render(lang,page,title,description,body):
     tr=lambda a,b:a if lang=='en' else b
     prefix='../' if lang=='zh' else ''
     path=('zh/' if lang=='zh' else '')+('' if page=='index' else page+'.html')
     enpath='' if page=='index' else page+'.html'
     other=('../'+enpath if lang=='zh' else 'zh/'+enpath)
-    nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if key==page else '')+f'>{label}</a>' for key,file,label in [('research','research.html',tr('Research','研究')),('projects','projects.html',tr('Projects','项目')),('experience','experience.html',tr('Experience','经历')),('photography','photography.html',tr('Outside work','生活')),('contact','index.html#lei-contact',tr('Contact','联系'))])
+    nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if key==page else '')+f'>{label}</a>' for key,file,label in [('research','research.html',tr('Research achievements','研究成果')),('projects','projects.html',tr('Projects','项目')),('experience','experience.html',tr('Experience','经历')),('photography','photography.html',tr('Outside work','生活')),('contact','index.html#lei-contact',tr('Contact','联系'))])
     return f'''<!doctype html>
 <html lang="{'zh-CN' if lang=='zh' else 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4f5f2">
 <title>{escape(title)} — {tr('Chenjun Lei','雷晨俊')}</title><meta name="description" content="{escape(description)}"><link rel="canonical" href="{BASE+path}">
 <link rel="alternate" hreflang="en" href="{BASE+enpath}"><link rel="alternate" hreflang="zh-CN" href="{BASE+'zh/'+enpath}"><link rel="alternate" hreflang="x-default" href="{BASE+enpath}">
 <meta property="og:type" content="website"><meta property="og:title" content="{escape(title)} — Chenjun Lei"><meta property="og:description" content="{escape(description)}"><meta property="og:url" content="{BASE+path}"><meta property="og:locale" content="{tr('en_GB','zh_CN')}">
-<link rel="icon" href="{prefix}assets/icons/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}css/style.css?v=4"><script defer src="{prefix}js/main.js?v=4"></script></head><body>
+<link rel="icon" href="{prefix}assets/icons/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}css/style.css?v=5"><script defer src="{prefix}js/main.js?v=5"></script></head><body>
 <a class="skip-link" href="#main">{tr('Skip to content','跳至正文')}</a><header><a class="brand" href="./">{tr('CHENJUN LEI','雷晨俊 / CHENJUN LEI')}</a><nav aria-label="{tr('Main navigation','主导航')}">{nav}<a class="language-switch" data-language-switch href="{other}" lang="{tr('zh-CN','en')}" hreflang="{tr('zh-CN','en')}" aria-label="{tr('切换至中文','Switch to English')}">{tr('中文','EN')}</a></nav></header>
 <main id="main">{body}</main><footer><p>© <span data-year>2026</span> CHENJUN LEI</p><p>{tr('Shanghai / Canberra','上海 / 堪培拉')}</p><a href="#main">{tr('Back to top ↑','回到顶部 ↑')}</a></footer></body></html>'''
 
@@ -117,28 +129,24 @@ def build(lang):
     def save(page,title,desc,body): (dest/(page+'.html')).write_text(render(lang,page,title,desc,body),encoding='utf-8')
     avatar_path='../assets/images/lei-avatar.webp' if lang=='zh' else 'assets/images/lei-avatar.webp'
     avatar_alt=tr('Night hiking in Canberra, with two hikers seen from behind under blue-green light.','堪培拉夜间徒步，两位徒步者的背影映着蓝绿色的夜光。')
-    art=f'<figure class="hero-avatar"><img src="{avatar_path}" alt="{avatar_alt}" width="1254" height="1254"><figcaption><span>{tr("FIELD NOTE / 01","行走记录 / 01")}</span><span>{tr("Canberra · Night walk","堪培拉 · 夜行")}</span></figcaption></figure>'
+    art=f'<figure class="hero-avatar"><img src="{avatar_path}" alt="{avatar_alt}" width="1254" height="1254"></figure>'
     role=tr('Data Engineer at Chuchiang Data in Shanghai and Master of Economics student at the Australian National University. Experienced in data development, FinTech, data-product design and commercialisation, with multiple publications. Interested in automotive modification and classical music; trumpet player in the Australian National University Symphony Orchestra and powertrain assembly engineer with ANUFS Formula Sport.','上海珠江数据工程师，澳大利亚国立大学经济学硕士在读。有丰富的数据开发、金融科技、数据产品设计开发及其商业化经验；拥有多篇论文。热爱汽车改装、古典音乐，现任澳大利亚国立大学交响乐团小号手、ANUFS 方程式赛车队内燃机动力总成工程师。')
-    body=f'<section class="hero" id="lei-top"><div><p class="kicker">{tr("Economics / Data / Decisions","经济学 / 数据 / 决策")}</p><h1>{tr("Chenjun Lei.","雷晨俊。")}</h1><p class="intro">{tr("Understanding systems.<br>Building with data.","理解系统，<br>用数据创造价值。")}</p><p class="role">{role}</p><div class="hero-links">{link("research.html",tr("Research & papers","研究与论文"))}{link("experience.html",tr("Experience & education","经历与教育"))}</div></div>{art}</section>'
+    body=f'<section class="hero" id="lei-top"><div><p class="kicker">{tr("Economics / Data / Decisions","经济学 / 数据 / 决策")}</p><h1>{tr("Chenjun Lei.","雷晨俊。")}</h1><p class="intro">{tr("An ordinary enjoyer of life.","一位普通生活享受者。")}</p><p class="role">{role}</p><div class="hero-links">{link("research.html",tr("Research achievements & papers","研究成果与论文"))}{link("experience.html",tr("Experience & education","经历与教育"))}</div></div>{art}</section>'
     body+='<div class="index">'+''.join(f'<a href="#lei-{id}"><span>{n:02} / {label}</span>{title}</a>' for n,(id,label,title) in enumerate([('research',tr('INVESTIGATE','探索'),tr('Research & publications','研究与学术成果')),('projects',tr('BUILD','实践'),tr('Projects & case studies','项目与案例')),('experience',tr('CONTRIBUTE','参与'),tr('Experience & education','工作与教育')),('outside',tr('OBSERVE','观察'),tr('Life beyond work','工作之外'))],1))+'</div>'
     body+='<section class="about-strip"><p class="kicker">'+tr('A little context','关于我')+'</p><p>'+tr('I study economics at the Australian National University and work across financial data, product development and applied research. My experience spans FinTech products at Chuchiang Data, financial audit, debt underwriting and empirical research in Macao.','我在澳大利亚国立大学学习经济学，关注金融数据、产品开发与应用研究。我的经历涵盖珠江数据的金融科技产品、金融审计、债券承销，以及澳门的实证研究。')+'</p></section>'
-    body+=chapter('research','01',tr('Research','研究'),tr('Questions<br>worth asking.','值得追问<br>的问题。'),''.join(paper(p,lang) for p in papers[:3])+link('research.html',tr('All research & citations','全部研究与引用')))
+    body+=chapter('research','01',tr('Research achievements','研究成果'),tr('Questions<br>worth asking.','值得追问<br>的问题。'),''.join(paper(p,lang) for p in papers[:3])+link('research.html',tr('All research & citations','全部研究与引用')))
     cards=''
     for n,p in enumerate(projects):
         cards+=f'<article class="project"><p class="kicker">0{n+1} / {e(p["tag"],lang)}</p><h3>{e(p["title"],lang)}</h3><p>{e(p["intro"],lang)}</p><p class="project-metric">{e(p["metric"],lang)}</p>{link("projects.html#"+p["id"],tr("View project","项目详情"))}</article>'
     body+=chapter('projects','02',tr('Projects','项目'),tr('From ideas<br>to practice.','从想法<br>到实践。'),'<div class="project-grid">'+cards+'</div>')
     body+=chapter('experience','03',tr('Experience','经历'),tr('A professional<br>perspective.','在实践中<br>积累视角。'),''.join(job(j,lang) for j in jobs)+link('experience.html',tr('Full experience, education & awards','完整经历、教育与荣誉')))
     body+=chapter('education','04',tr('Education','教育'),tr('Learning<br>with purpose.','持续学习。'),education(lang))
-    cover_caption=tr('Photobook cover · 世界皆舞台','个人影集封面 · 世界皆舞台')
-    cover_alt=tr('Photobook cover: a Canberra lakeside photograph with the handwritten title 世界皆舞台 and a small Hatsune Miku illustration.','个人影集《世界皆舞台》封面：堪培拉湖畔照片，叠加手写标题与初音未来插画。')
-    cover_path='../assets/images/world-stage-cover.webp' if lang=='zh' else 'assets/images/world-stage-cover.webp'
-    cover_card=f'<a class="cover-card" href="photography.html#photobook"><img src="{cover_path}" alt="{cover_alt}" width="1536" height="1024" loading="lazy"><span>{cover_caption} ↗</span></a>'
-    body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),cover_card+interests(lang)+link('photography.html',tr('Beyond the screen','工作之外')))
+    body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),photo_carousel(lang, '../' if lang=='zh' else '')+interests(lang)+link('photography.html',tr('Beyond the screen','工作之外')))
     contact=f'<h2>{tr("Let’s compare notes.","交换想法，保持联系。")}</h2><p>{tr("Research, data products, or a shared curiosity.","关于研究、数据产品，或一个共同感兴趣的问题。")}</p><dl class="contact-list"><div><dt>{tr("Email","邮箱")}</dt><dd><a href="mailto:fjsmlcj@gmail.com">fjsmlcj@gmail.com</a></dd></div><div><dt>GitHub</dt><dd><a href="https://github.com/Cromwell-Lei">Cromwell-Lei ↗</a></dd></div><div><dt>{tr("Location","所在地")}</dt><dd>{tr("Shanghai, China / Canberra, Australia","中国上海 / 澳大利亚堪培拉")}</dd></div></dl><details class="phone-details"><summary>{tr("Phone contact","电话联系")}</summary><p><a href="tel:+8619168655714">+86 19168655714</a> · <a href="tel:+61458020537">+61 458020537</a></p></details>'
     body+=chapter('contact','06',tr('Contact','联系'),'',contact)
     save('index',tr('Research, products & perspectives','研究、产品与观察'),tr('Chenjun Lei: economics at ANU, FinTech products, synthetic data and applied research. Explore papers, projects, experience and interests.','雷晨俊的个人主页：澳大利亚国立大学经济学、金融科技产品、合成数据与应用研究。论文、项目、工作经历与个人兴趣。'),body)
 
-    body=hero(lang,'01 / '+tr('Research','研究'),tr('Questions worth asking.','值得追问的问题。'),tr('Credit risk, safer automated decisions, and the reuse of experience.','信用风险、更安全的自动化决策，以及经验的复用。'))
+    body=hero(lang,'01 / '+tr('Research achievements','研究成果'),tr('Questions worth asking.','值得追问的问题。'),tr('Credit risk, safer automated decisions, and the reuse of experience.','信用风险、更安全的自动化决策，以及经验的复用。'))
     body+='<div class="archive-content"><div class="research-overview">'+tr('2026 · 2 accepted conference papers · 1 submitted manuscript<br>2025 · 1 research report','2026 · 2 篇已接收会议论文 · 1 篇投稿论文<br>2025 · 1 项研究报告')+'</div>'+''.join(paper(p,lang,True) for p in papers)+link('projects.html#credit-risk',tr('Explore the credit-risk project','了解信用风险研究项目'))+'</div>'
     save('research',tr('Research & publications','研究与学术成果'),tr('Papers, research summaries, authors, publication status and original sources for Chenjun Lei.','雷晨俊的论文与研究报告：完整作者、投稿状态、研究简介与原文链接。'),body)
 
@@ -160,7 +168,7 @@ def build(lang):
     save('experience',tr('Experience & education','经历与教育'),tr('Chenjun Lei’s work experience, education, research-team awards, skills and campus activities.','雷晨俊的工作经历、教育背景、科研团队奖学金、技能与校园活动。'),body)
 
     body=hero(lang,'04 / '+tr('Outside work','生活'),tr('A different kind<br>of attention.','另一种<br>观察方式。'),tr('Photography, music and the mechanics of things that move.','摄影、音乐，以及驱动车辆前行的机械。'))
-    body+='<section class="archive-block">'+interests(lang)+'</section><section class="photobook-note" id="photobook"><p class="kicker">'+tr('Personal photobook / In development','个人影集 / 筹备中')+'</p><h2>世界皆舞台</h2><p>'+tr('All the World’s a Stage','用影像，记录我所看见的世界。')+'</p><figure class="photobook-cover"><img src="../assets/images/world-stage-cover.webp" alt="'+tr('Photobook cover: a Canberra lakeside photograph with the handwritten title 世界皆舞台 and a small Hatsune Miku illustration.','个人影集《世界皆舞台》封面：堪培拉湖畔照片，叠加手写标题与初音未来插画。')+'" width="1536" height="1024" loading="lazy"><figcaption><span>'+tr('Photobook cover study','个人影集封面设计')+'</span><span>Canberra · 2026</span></figcaption></figure><p class="archive-note">'+tr('A photographic collection in preparation. Selected photographs will be added as the sequence takes shape.','正在整理与编排中的个人摄影作品集。精选作品将在编排成形后陆续加入。')+'</p></section>'+link('index.html#lei-contact',tr('Get in touch','保持联系'))
+    body+='<section class="archive-block">'+interests(lang)+'</section><section class="photobook-note" id="photobook"><p class="kicker">'+tr('Personal photobook / In development','个人影集 / 筹备中')+'</p><h2>世界皆舞台</h2><p>'+tr('All the World’s a Stage','用影像，记录我所看见的世界。')+'</p>'+photo_carousel(lang, '../')+'<p class="archive-note">'+tr('A photographic collection in preparation. Selected photographs will be added as the sequence takes shape.','正在整理与编排中的个人摄影作品集。精选作品将在编排成形后陆续加入。')+'</p></section>'+link('index.html#lei-contact',tr('Get in touch','保持联系'))
     save('photography',tr('Outside work','工作之外'),tr('Photography, trumpet and Formula Sport: Chenjun Lei beyond research and work.','摄影、小号与方程式赛车：研究和工作之外的雷晨俊。'),body)
 
 for lang in ('en','zh'): build(lang)
