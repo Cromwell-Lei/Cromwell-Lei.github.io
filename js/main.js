@@ -27,46 +27,6 @@
     if (location.hash) target.href = target.href.split('#')[0] + location.hash;
   });
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
-  document.querySelectorAll('[data-globe]').forEach(globe => {
-    let angle = 0;
-    let startX = 0;
-    let startAngle = 0;
-    let pointerId = null;
-    let dragged = false;
-    const setAngle = value => {
-      angle = value;
-      globe.style.setProperty('--globe-turn', angle + 'deg');
-    };
-    globe.addEventListener('pointerdown', event => {
-      pointerId = event.pointerId;
-      startX = event.clientX;
-      startAngle = angle;
-      dragged = false;
-      globe.classList.add('is-dragging');
-      globe.setPointerCapture(pointerId);
-    });
-    globe.addEventListener('pointermove', event => {
-      if (event.pointerId !== pointerId) return;
-      const distance = event.clientX - startX;
-      if (Math.abs(distance) > 2) dragged = true;
-      setAngle(startAngle + distance * 2.2);
-    });
-    const stop = event => {
-      if (event.pointerId !== pointerId) return;
-      if (globe.hasPointerCapture(pointerId)) globe.releasePointerCapture(pointerId);
-      globe.classList.remove('is-dragging');
-      if (!dragged && event.type === 'pointerup') setAngle(angle + 28);
-      pointerId = null;
-    };
-    globe.addEventListener('pointerup', stop);
-    globe.addEventListener('pointercancel', stop);
-    globe.addEventListener('keydown', event => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        event.preventDefault();
-        setAngle(angle + (event.key === 'ArrowLeft' ? -28 : 28));
-      }
-    });
-  });
   document.querySelectorAll('[data-carousel]').forEach(carousel => {
     const slides = [...carousel.querySelectorAll('[data-carousel-slide]')];
     const previous = carousel.querySelector('[data-carousel-prev]');

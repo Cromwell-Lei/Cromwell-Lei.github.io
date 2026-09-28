@@ -443,15 +443,6 @@ body footer{
   font:10px/1.6 monospace;
   color:var(--muted)
 }
-body .footer-globe{--globe-turn:0deg;display:grid;place-items:center;width:38px;height:38px;padding:0;border:0;background:transparent;color:var(--accent);cursor:grab;touch-action:none}
-body .footer-globe:active,body .footer-globe.is-dragging{cursor:grabbing}
-body .footer-globe svg{display:block;width:34px;height:34px;overflow:visible}
-body .footer-globe .globe-outline,body .footer-globe .globe-art ellipse,body .footer-globe .globe-art path{fill:none;stroke:currentColor;stroke-width:1.15;vector-effect:non-scaling-stroke}
-body .footer-globe .globe-art{transform:rotate(var(--globe-turn));transform-origin:32px 32px;transition:transform 220ms ease}
-body .footer-globe.is-dragging .globe-art{transition:none}
-body .footer-globe .globe-land{fill:currentColor;fill-opacity:.16}
-body .footer-globe:hover .globe-art{stroke-width:1.4}
-@media(prefers-reduced-motion:reduce){body .footer-globe .globe-art{transition:none}}
 
     @media(max-width:700px){
   body{
