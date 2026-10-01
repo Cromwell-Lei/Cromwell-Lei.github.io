@@ -1028,6 +1028,10 @@ body .publication details{margin-top:16px}
 body .publication details p{padding-top:12px}
 body .research-overview{padding:20px 0;border-top:1px solid var(--rule);font-size:13px;line-height:1.9;color:var(--muted)}
 body .project-grid{gap:35px 30px}
+body .portfolio-feature{display:grid;gap:8px;margin:0 0 35px;padding:24px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+body .portfolio-feature strong{font:clamp(24px,3vw,38px)/1.15 Georgia,'Times New Roman',serif;font-weight:400}
+body .portfolio-feature>span:last-child{max-width:620px;color:var(--muted);font-size:14px}
+body .portfolio-feature:hover strong{text-decoration:underline;text-underline-offset:7px}
 body .project{border-top:1px solid var(--rule);padding-top:20px}
 body .project h3{line-height:1.35;margin:12px 0}
 body .project .project-metric,body .archive-block .project-metric{font-size:17px;color:var(--accent);margin:16px 0 8px}

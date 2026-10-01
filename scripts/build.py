@@ -122,12 +122,14 @@ def render(lang,page,title,description,body):
     path=('zh/' if lang=='zh' else '')+('' if page=='index' else page+'.html')
     enpath='' if page=='index' else page+'.html'
     other=('../'+enpath if lang=='zh' else 'zh/'+enpath)
+    page_title=escape(title) if page=='index' else escape(title)+' — '+tr('Chenjun Lei','雷晨俊')
+    og_title=escape(title) if page=='index' else escape(title)+' — Chenjun Lei'
     nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if key==page else '')+f'>{label}</a>' for key,file,label in [('research','research.html',tr('Research achievements','研究成果')),('projects','projects.html',tr('Projects','项目')),('experience','experience.html',tr('Experience','经历')),('photography','photography.html',tr('Outside work','生活')),('contact','index.html#lei-contact',tr('Contact','联系'))])
     return f'''<!doctype html>
 <html lang="{'zh-CN' if lang=='zh' else 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4f5f2">
-<title>{escape(title)} — {tr('Chenjun Lei','雷晨俊')}</title><meta name="description" content="{escape(description)}"><link rel="canonical" href="{BASE+path}">
+<title>{page_title}</title><meta name="description" content="{escape(description)}"><link rel="canonical" href="{BASE+path}">
 <link rel="alternate" hreflang="en" href="{BASE+enpath}"><link rel="alternate" hreflang="zh-CN" href="{BASE+'zh/'+enpath}"><link rel="alternate" hreflang="x-default" href="{BASE+enpath}">
-<meta property="og:type" content="website"><meta property="og:title" content="{escape(title)} — Chenjun Lei"><meta property="og:description" content="{escape(description)}"><meta property="og:url" content="{BASE+path}"><meta property="og:locale" content="{tr('en_GB','zh_CN')}">
+<meta property="og:type" content="website"><meta property="og:title" content="{og_title}"><meta property="og:description" content="{escape(description)}"><meta property="og:url" content="{BASE+path}"><meta property="og:locale" content="{tr('en_GB','zh_CN')}">
 <link rel="icon" href="{prefix}assets/icons/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}css/style.css?v=7"><script defer src="{prefix}js/main.js?v=7"></script></head><body>
 <a class="skip-link" href="#main">{tr('Skip to content','跳至正文')}</a><header><a class="brand" href="./">{tr('CHENJUN LEI','雷晨俊 / CHENJUN LEI')}</a><nav aria-label="{tr('Main navigation','主导航')}">{nav}<a class="language-switch" data-language-switch href="{other}" lang="{tr('zh-CN','en')}" hreflang="{tr('zh-CN','en')}" aria-label="{tr('切换至中文','Switch to English')}">{tr('中文','EN')}</a></nav></header>
 <main id="main">{body}</main><footer><p>© <span data-year>2026</span> CHENJUN LEI</p><p>{tr('May we both have good things to show for it :)','祝我们都有好收获 :)')}</p><a href="#main">{tr('Back to top ↑','回到顶部 ↑')}</a></footer></body></html>'''
@@ -150,13 +152,15 @@ def build(lang):
     cards=''
     for n,p in enumerate(projects):
         cards+=f'<article class="project"><p class="kicker">0{n+1} / {e(p["tag"],lang)}</p><h3>{e(p["title"],lang)}</h3><p>{e(p["intro"],lang)}</p><p class="project-metric">{e(p["metric"],lang)}</p>{link("projects.html#"+p["id"],tr("View project","项目详情"))}</article>'
-    body+=chapter('projects','02',tr('Projects','项目'),tr('From ideas<br>to practice.','从想法<br>到实践。'),'<div class="project-grid">'+cards+'</div>')
+    portfolio_path='../assets/portfolio/2cases.pdf' if lang=='zh' else 'assets/portfolio/2cases.pdf'
+    portfolio=f'<a class="portfolio-feature" href="{portfolio_path}" target="_blank" rel="noopener"><span class="kicker">{tr("Featured work / PDF","精选作品 / PDF")}</span><strong>{tr("Business analysis portfolio","商业分析作品集")}</strong><span>{tr("Two case studies on growth structure and profitability analysis. Open the 19-page portfolio ↗","两份关于增长结构与盈利分析的商业分析案例，点击打开 19 页完整作品集 ↗")}</span></a>'
+    body+=chapter('projects','02',tr('Projects','项目'),tr('From ideas<br>to practice.','从想法<br>到实践。'),portfolio+'<div class="project-grid">'+cards+'</div>')
     body+=chapter('experience','03',tr('Experience','经历'),tr('A professional<br>perspective.','在实践中<br>积累视角。'),''.join(job(j,lang) for j in jobs)+link('experience.html',tr('Full experience, education & awards','完整经历、教育与荣誉')))
     body+=chapter('education','04',tr('Education','教育'),tr('Learning<br>with purpose.','持续学习。'),education(lang))
     body+=chapter('outside','05',tr('Outside work','生活'),tr('A different<br>kind of attention.','另一种<br>观察方式。'),photo_carousel(lang, '../' if lang=='zh' else '')+interests(lang, True)+link('photography.html',tr('Beyond the screen','工作之外')))
     contact=f'<h2>{tr("Let’s compare notes.","交换想法，保持联系。")}</h2><p>{tr("Research, data products, or a shared curiosity.","关于研究、数据产品，或一个共同感兴趣的问题。")}</p><dl class="contact-list"><div><dt>{tr("Email","邮箱")}</dt><dd><a href="mailto:fjsmlcj@gmail.com">fjsmlcj@gmail.com</a></dd></div><div><dt>GitHub</dt><dd><a href="https://github.com/Cromwell-Lei">Cromwell-Lei ↗</a></dd></div><div><dt>{tr("Location","所在地")}</dt><dd>{tr("Shanghai, China / Canberra, Australia","中国上海 / 澳大利亚堪培拉")}</dd></div></dl><details class="phone-details"><summary>{tr("Phone contact","电话联系")}</summary><p><a href="tel:+8619168655714">+86 19168655714</a> · <a href="tel:+61458020537">+61 458020537</a></p></details>'
     body+=chapter('contact','06',tr('Contact','联系'),'',contact)
-    save('index',tr('Research, products & perspectives','研究、产品与观察'),tr('Chenjun Lei: economics at ANU, FinTech products, synthetic data and applied research. Explore papers, projects, experience and interests.','雷晨俊的个人主页：澳大利亚国立大学经济学、金融科技产品、合成数据与应用研究。论文、项目、工作经历与个人兴趣。'),body)
+    save('index','ChenjunLei',tr('Chenjun Lei: economics at ANU, FinTech products, synthetic data and applied research. Explore papers, projects, experience and interests.','雷晨俊的个人主页：澳大利亚国立大学经济学、金融科技产品、合成数据与应用研究。论文、项目、工作经历与个人兴趣。'),body)
 
     body=hero(lang,'01 / '+tr('Research achievements','研究成果'),tr('Questions worth asking.','值得追问的问题。'),tr('Credit risk, safer automated decisions, and the reuse of experience.','信用风险、更安全的自动化决策，以及经验的复用。'))
     body+='<div class="archive-content"><div class="research-overview">'+tr('2026 · 2 accepted conference papers · 1 submitted manuscript<br>2025 · 1 research report','2026 · 2 篇已接收会议论文 · 1 篇投稿论文<br>2025 · 1 项研究报告')+'</div>'+''.join(paper(p,lang,True) for p in papers)+link('projects.html#credit-risk',tr('Explore the credit-risk project','了解信用风险研究项目'))+'</div>'
